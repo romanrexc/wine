@@ -68,7 +68,11 @@ HRESULT WINAPI DwmEnableComposition(UINT uCompositionAction)
  */
 HRESULT WINAPI DwmExtendFrameIntoClientArea(HWND hwnd, const MARGINS* margins)
 {
-    FIXME("(%p, %p) stub\n", hwnd, margins);
+    static int once;
+    if (!once) {
+        FIXME("(%p, %p) stub\n", hwnd, margins);
+        once = 1;
+    }
 
     return S_OK;
 }
@@ -162,7 +166,11 @@ HRESULT WINAPI DwmGetGraphicsStreamTransformHint(UINT uIndex, MilMatrix3x2D *pTr
  */
 HRESULT WINAPI DwmEnableBlurBehindWindow(HWND hWnd, const DWM_BLURBEHIND *pBlurBuf)
 {
-    FIXME("%p %p\n", hWnd, pBlurBuf);
+    static int once;
+    if (!once) {
+        FIXME("%p %p\n", hWnd, pBlurBuf);
+        once = 1;
+    }
 
     return E_NOTIMPL;
 }

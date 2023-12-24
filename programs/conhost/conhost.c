@@ -2094,7 +2094,7 @@ static NTSTATUS write_console( struct screen_buffer *screen_buffer, const WCHAR 
                 }
                 continue;
             case '\a':
-                FIXME( "beep\n" );
+                { static int once; if (!once) { FIXME( "beep\n" ); once++; } }
                 continue;
             case '\r':
                 screen_buffer->cursor_x = 0;

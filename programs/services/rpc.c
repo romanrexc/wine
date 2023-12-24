@@ -1574,8 +1574,13 @@ DWORD __cdecl svcctl_EnumServicesStatusExW(
     WINE_TRACE("(%p, 0x%lx, 0x%lx, %p, %lu, %p, %p, %s)\n", hmngr, type, state, buffer, size,
                needed, returned, wine_dbgstr_w(group));
 
-    if (resume_handle)
-        FIXME("resume handle not supported\n");
+    if (resume_handle) {
+        static int once;
+        if (!once) {
+            FIXME("resume handle not supported\n");
+            once = 1;
+        }
+    }
 
     if (!type || !state)
         return ERROR_INVALID_PARAMETER;

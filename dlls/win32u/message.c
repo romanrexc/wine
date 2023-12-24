@@ -1265,9 +1265,7 @@ static size_t pack_message( HWND hwnd, UINT message, WPARAM wparam, LPARAM lpara
     case WM_PAINTCLIPBOARD:
     case WM_SIZECLIPBOARD:
     /* these contain HICON */
-    case WM_GETICON:
     case WM_SETICON:
-    case WM_QUERYDRAGICON:
     case WM_QUERYPARKICON:
     /* these contain pointers */
     case WM_DROPOBJECT:
@@ -1278,6 +1276,24 @@ static size_t pack_message( HWND hwnd, UINT message, WPARAM wparam, LPARAM lpara
         FIXME( "msg %x (%s) not supported yet\n", message, debugstr_msg_name(message, hwnd) );
         data->count = -1;
         return 0;
+    case WM_QUERYDRAGICON: { /* for taskmgr */
+        static int once;
+        data->count = -1;
+        if (!once) {
+            FIXME( "msg %x (%s) not supported yet\n", message, debugstr_msg_name(message, hwnd) );
+            once++;
+        }
+        return 0;
+    }
+    case WM_GETICON: { /* for taskmgr */
+        static int once;
+        data->count = -1;
+        if (!once) {
+            FIXME( "msg %x (%s) not supported yet\n", message, debugstr_msg_name(message, hwnd) );
+            once++;
+        }
+        return 0;
+    }
     }
     return 0;
 }

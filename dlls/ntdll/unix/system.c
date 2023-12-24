@@ -3263,7 +3263,13 @@ NTSTATUS WINAPI NtQuerySystemInformation( SYSTEM_INFORMATION_CLASS class,
             else memcpy( info, &sci, len);
         }
         else ret = STATUS_INFO_LENGTH_MISMATCH;
-        FIXME("info_class SYSTEM_CACHE_INFORMATION\n");
+        { /* taskmgr */
+          static int once;
+          if (!once) {
+            FIXME("info_class SYSTEM_CACHE_INFORMATION\n");
+            once++;
+          }
+        }
         break;
     }
 
@@ -3690,6 +3696,17 @@ NTSTATUS WINAPI NtQuerySystemInformation( SYSTEM_INFORMATION_CLASS class,
         snprintf( info, size, "%s%c%s%c%s%c%s", version, 0, wine_build, 0, buf.sysname, 0, buf.release );
         len = strlen(version) + strlen(wine_build) + strlen(buf.sysname) + strlen(buf.release) + 4;
         if (size < len) ret = STATUS_INFO_LENGTH_MISMATCH;
+        break;
+    }
+
+    case SystemProcessorCycleTimeInformation:
+    {
+        static int once;
+        if (!once) {
+            FIXME( "(SystemProcessorCycleTimeInformation,%p,0x%08x,%p) stub\n", info, (int)size, ret_size );
+            once = 1;
+        }
+        ret = STATUS_INVALID_INFO_CLASS;
         break;
     }
 

@@ -1658,7 +1658,11 @@ BOOL WINAPI SetWindowDisplayAffinity(HWND hwnd, DWORD affinity)
  */
 BOOL WINAPI SetWindowCompositionAttribute(HWND hwnd, void *data)
 {
-    FIXME("(%p, %p): stub\n", hwnd, data);
+    static int once;
+    if (!once) {
+        FIXME("(%p, %p): stub\n", hwnd, data);
+        once = 1;
+    }
     SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
 }
