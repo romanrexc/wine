@@ -47,7 +47,11 @@ ULONG WINAPI ControlTraceA( TRACEHANDLE handle, const char *session,
 ULONG WINAPI ControlTraceW( TRACEHANDLE handle, const WCHAR *session,
                             EVENT_TRACE_PROPERTIES *properties, ULONG control )
 {
-    FIXME("(%s, %s, %p, %ld) stub\n", wine_dbgstr_longlong(handle), debugstr_w(session), properties, control);
+    static int once;
+    if (!once) {
+        FIXME("(%s, %s, %p, %ld) stub\n", wine_dbgstr_longlong(handle), debugstr_w(session), properties, control);
+        once = 1;
+    }
     return ERROR_SUCCESS;
 }
 

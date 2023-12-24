@@ -895,13 +895,29 @@ static ULONG_PTR get_class_long_size( HWND hwnd, INT offset, UINT size, BOOL ans
                 {
                 case GCLP_HBRBACKGROUND:
                 case GCLP_HCURSOR:
-                case GCLP_HICON:
-                case GCLP_HICONSM:
                 case GCLP_WNDPROC:
                 case GCLP_MENUNAME:
                     FIXME( "offset %d not supported on other process window %p\n", offset, hwnd );
                     RtlSetLastWin32Error( ERROR_INVALID_HANDLE );
                     break;
+                case GCLP_HICON: { /* taskmgr */
+                    static int once;
+                    if (!once) {
+                        FIXME( "offset %d not supported on other process window %p\n", offset, hwnd );
+                        once++;
+                    }
+                    RtlSetLastWin32Error( ERROR_INVALID_HANDLE );
+                    break;
+                }
+                case GCLP_HICONSM: { /* taskmgr */
+                    static int once;
+                    if (!once) {
+                        FIXME( "offset %d not supported on other process window %p\n", offset, hwnd );
+                        once++;
+                    }
+                    RtlSetLastWin32Error( ERROR_INVALID_HANDLE );
+                    break;
+                }
                 case GCL_STYLE:
                     retvalue = reply->old_style;
                     break;

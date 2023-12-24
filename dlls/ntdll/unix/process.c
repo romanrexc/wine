@@ -1104,9 +1104,14 @@ void fill_vm_counters( VM_COUNTERS_EX *pvmi, int unix_pid )
 #endif
 
 #define UNIMPLEMENTED_INFO_CLASS(c) \
-    case c: \
-        FIXME( "(process=%p) Unimplemented information class: " #c "\n", handle); \
-        ret = STATUS_INVALID_INFO_CLASS; \
+    case c: { \
+          static int once; \
+          if (!once) { \
+            FIXME( "(process=%p) Unimplemented information class: " #c "\n", handle); \
+            once = 1; \
+          } \
+          ret = STATUS_INVALID_INFO_CLASS; \
+        } \
         break
 
 /**********************************************************************
@@ -1140,6 +1145,8 @@ NTSTATUS WINAPI NtQueryInformationProcess( HANDLE handle, PROCESSINFOCLASS class
     UNIMPLEMENTED_INFO_CLASS(ProcessLUIDDeviceMapsEnabled);
     UNIMPLEMENTED_INFO_CLASS(ProcessBreakOnTermination);
     UNIMPLEMENTED_INFO_CLASS(ProcessHandleTracing);
+    UNIMPLEMENTED_INFO_CLASS(ProcessIoPriority);
+    UNIMPLEMENTED_INFO_CLASS(ProcessHandleInformation);
 
     case ProcessBasicInformation:
         {
@@ -1552,8 +1559,12 @@ NTSTATUS WINAPI NtQueryInformationProcess( HANDLE handle, PROCESSINFOCLASS class
             else
             {
                 PROCESS_CYCLE_TIME_INFORMATION cycles;
+                static int once;
 
-                FIXME( "ProcessCycleTime (%p,%p,0x%08x,%p) stub\n", handle, info, (int)size, ret_len );
+                if (!once) {
+                    FIXME( "ProcessCycleTime (%p,%p,0x%08x,%p) stub\n", handle, info, (int)size, ret_len );
+                    once = 1;
+                }
                 cycles.AccumulatedCycles = 0;
                 cycles.CurrentCycleCount = 0;
 

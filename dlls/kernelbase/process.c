@@ -890,7 +890,11 @@ DWORD WINAPI DECLSPEC_HOTPATCH GetProcessId( HANDLE process )
 BOOL WINAPI /* DECLSPEC_HOTPATCH */ GetProcessMitigationPolicy( HANDLE process, PROCESS_MITIGATION_POLICY policy,
                                                           void *buffer, SIZE_T length )
 {
-    FIXME( "(%p, %u, %p, %Iu): stub\n", process, policy, buffer, length );
+    static int once;
+    if (!once) {
+        FIXME( "(%p, %u, %p, %Iu): stub\n", process, policy, buffer, length );
+        once = 1;
+    }
     return TRUE;
 }
 
@@ -969,7 +973,11 @@ DWORD WINAPI DECLSPEC_HOTPATCH GetProcessVersion( DWORD pid )
 BOOL WINAPI DECLSPEC_HOTPATCH GetProcessWorkingSetSizeEx( HANDLE process, SIZE_T *minset,
                                                           SIZE_T *maxset, DWORD *flags)
 {
-    FIXME( "(%p,%p,%p,%p): stub\n", process, minset, maxset, flags );
+    static int once;
+    if (!once) {
+        FIXME( "(%p,%p,%p,%p): stub\n", process, minset, maxset, flags );
+        once = 1;
+    }
     /* 32 MB working set size */
     if (minset) *minset = 32*1024*1024;
     if (maxset) *maxset = 32*1024*1024;
