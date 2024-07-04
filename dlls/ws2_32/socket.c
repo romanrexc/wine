@@ -1254,8 +1254,9 @@ int WINAPI closesocket( SOCKET s )
 
     if (!socket_list_remove( s ))
     {
-        SetLastError( WSAENOTSOCK );
-        return -1;
+        /* Seems wine lacks on fork this socket */
+        //SetLastError( WSAENOTSOCK );
+        //return -1;
     }
 
     CloseHandle( (HANDLE)s );
