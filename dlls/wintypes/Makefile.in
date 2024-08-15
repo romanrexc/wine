@@ -1,10 +1,11 @@
 MODULE    = wintypes.dll
 IMPORTLIB = wintypes
-IMPORTS   = combase
+IMPORTS   = combase shlwapi
 
 SOURCES = \
 	buffer.c \
 	classes.idl \
 	main.c \
 	storage.c \
-	wintypes_private.idl
+	wintypes_private.idl \
+	wintypes.rc
