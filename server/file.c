@@ -358,8 +358,9 @@ struct security_descriptor *mode_to_sd( mode_t mode, const struct sid *user, con
     {
         /* appropriate access rights for the user */
         ace = set_ace( ace_next( ace ), user, ACCESS_ALLOWED_ACE_TYPE, flags, WRITE_DAC | WRITE_OWNER );
-        if (mode & S_IRUSR) ace->mask |= FILE_GENERIC_READ | FILE_GENERIC_EXECUTE;
+        if (mode & S_IRUSR) ace->mask |= FILE_GENERIC_READ;
         if (mode & S_IWUSR) ace->mask |= FILE_GENERIC_WRITE | DELETE | FILE_DELETE_CHILD;
+        if (mode & S_IXUSR) ace->mask |= FILE_GENERIC_EXECUTE;
     }
     if ((!(mode & S_IRUSR) && (mode & (S_IRGRP|S_IROTH))) ||
         (!(mode & S_IWUSR) && (mode & (S_IWGRP|S_IWOTH))) ||
@@ -368,17 +369,20 @@ struct security_descriptor *mode_to_sd( mode_t mode, const struct sid *user, con
         /* deny just in case the user is a member of the group */
         ace = set_ace( ace_next( ace ), user, ACCESS_DENIED_ACE_TYPE, flags, 0 );
         if (!(mode & S_IRUSR) && (mode & (S_IRGRP|S_IROTH)))
-            ace->mask |= FILE_GENERIC_READ | FILE_GENERIC_EXECUTE;
+            ace->mask |= FILE_GENERIC_READ;
         if (!(mode & S_IWUSR) && (mode & (S_IWGRP|S_IROTH)))
             ace->mask |= FILE_GENERIC_WRITE | DELETE | FILE_DELETE_CHILD;
+        if (!(mode & S_IXUSR) && (mode & (S_IXGRP|S_IXOTH)))
+            ace->mask |= FILE_GENERIC_EXECUTE;
         ace->mask &= ~STANDARD_RIGHTS_ALL; /* never deny standard rights */
     }
     if (mode & S_IRWXO)
     {
         /* appropriate access rights for Everyone */
         ace = set_ace( ace_next( ace ), &world_sid, ACCESS_ALLOWED_ACE_TYPE, flags, 0 );
-        if (mode & S_IROTH) ace->mask |= FILE_GENERIC_READ | FILE_GENERIC_EXECUTE;
+        if (mode & S_IROTH) ace->mask |= FILE_GENERIC_READ;
         if (mode & S_IWOTH) ace->mask |= FILE_GENERIC_WRITE | DELETE | FILE_DELETE_CHILD;
+        if (mode & S_IXOTH) ace->mask |= FILE_GENERIC_EXECUTE;
     }
 
     return sd;
