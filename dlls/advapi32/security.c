@@ -3011,6 +3011,13 @@ DWORD WINAPI SetSecurityInfo(HANDLE handle, SE_OBJECT_TYPE ObjectType,
             /* inherit parent directory DACL */
             if (!(control & SE_DACL_PROTECTED))
             {
+              FILE_BASIC_INFO info;
+              IO_STATUS_BLOCK io;
+              status = NtQueryInformationFile( handle, &io, &info, sizeof(info), FileBasicInformation );
+              if (status) return RtlNtStatusToDosError(status);
+
+              if (info.FileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+              {
                 status = NtQueryObject(handle, ObjectNameInformation, NULL, 0, &size);
                 if (status != STATUS_INFO_LENGTH_MISMATCH)
                     return RtlNtStatusToDosError(status);
@@ -3068,6 +3075,7 @@ DWORD WINAPI SetSecurityInfo(HANDLE handle, SE_OBJECT_TYPE ObjectType,
                 }
                 else
                     free(name_info);
+              }
             }
         }
 
